@@ -1,0 +1,4 @@
+[Project]
+Name=sabatAnalysis
+Manager=KDevCMakeManager
+VersionControl=kdevgit
