@@ -1,4 +1,4 @@
 project(sabatanalysis)
 
-add_executable(sabatanalysis main.cpp)
+add_executable(sabatanalysis main.cpp dataFile.cpp)
 
