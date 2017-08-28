@@ -9,8 +9,8 @@ dataFile::dataFile(const dataFile& file)
 
 dataFile::dataFile(const std::string& path)
 :fPath(path)
-{
-  if(!checkPath())
+{ 
+  if( path.compare("") != 0 && !checkPath() )
   {
     std::cout<< "Bad path to file: " << path << std::endl;
     std::exit(2);
