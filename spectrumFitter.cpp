@@ -18,7 +18,7 @@ Double_t simulateFunction(Double_t* x, Double_t par[])
 spectrumFitter::spectrumFitter(const elementSpectrum& firstSpectrum, const elementSpectrum& secondSpectrum)
 :fFirstSpectrum(firstSpectrum), fSecondSpectrum(secondSpectrum)
 {
-    fSpectraToFit.push_back(fSecondSpectrum);
+    fSpectraToFit.push_back(secondSpectrum);
 }
 
 void spectrumFitter::addNextSpectrum(const elementSpectrum& spectrum)
@@ -53,12 +53,23 @@ void spectrumFitter::fit(std::string out)
   }
   
    c->BuildLegend();
-//   c->SetLogy();
+  c->SetLogy();
   std::cout << "Chi square: " << fFnc->GetChisquare() << std::endl;
 
   TString outName = out;
   outName+=".png";
   c->SaveAs(outName);
+  delete c;
 }
 
 
+spectrumFitter::~spectrumFitter()
+{
+
+  for(unsigned int i = 0; i < globalHisto.size(); i++)
+  {
+    globalHisto.pop_back();
+  } 
+  
+  delete fFnc;  
+}

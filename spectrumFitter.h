@@ -10,7 +10,7 @@ public:
   spectrumFitter(const elementSpectrum& firstSpectrum, const elementSpectrum& secondSpectrum);
   void fit(std::string out);
   void addNextSpectrum(const elementSpectrum& spectrum);
-  
+  ~spectrumFitter();
 private:
   elementSpectrum fFirstSpectrum, fSecondSpectrum;
   std::vector<elementSpectrum> fSpectraToFit;
