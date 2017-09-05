@@ -5,6 +5,40 @@
 #include "elementSpectrum.h"
 #include "spectrumFitter.h"
 
+void exampleOfSingleFit(const std::string& file1, const std::string& file2);
+TH1F generateGaussian(const std::string& name ,const  double mean, const double sigma, const double N);
+TH1F generateThreeGaussians(const std::string& name ,const std::vector<double>  mean, const std::vector<double>  sigma, const std::vector<double> N);
+void testOfSinglePeak(const double expPeakHeight, const double simPeakHeight, const std::string out);
+void testOfFewGaussians();
+void testOfFewSinglePeaks();
+
+int main(int argc, char **argv) {
+  
+  exampleOfSingleFit(argv[1], argv[2]);
+  return 0;
+}
+
+void exampleOfSingleFit(const std::string& file1, const std::string& file2)
+{
+  elementSpectrum spec(file1);
+  spec.readData();
+  
+  elementSpectrum spec2(file2);
+  spec2.readData();
+  
+  spectrumFitter test(spec, spec2);
+  test.fit(file2);
+  
+}
+
+void exampleOfElementSpectrumUsage(const std::string& filePath, const std::string& outPath)
+{
+  elementSpectrum file(filePath);
+   file.readData();
+   file.plot(outPath);
+    
+}
+
 TH1F generateGaussian(const std::string& name ,const  double mean, const double sigma, const double N)
 {
   TH1F histo (name.c_str(), name.c_str(), 1101, 0.0000E+00, 1.1E+01);
@@ -32,47 +66,21 @@ TH1F generateThreeGaussians(const std::string& name ,const std::vector<double>  
     return histoMain;
 }
 
-
 void testOfSinglePeak(const double expPeakHeight, const double simPeakHeight, const std::string out)
 {
   TH1F histoOne = generateGaussian("experimental", 5, 1, expPeakHeight);
-  std::cout<< histoOne.GetEntries()<<std::endl;
   TH1F histoTwo = generateGaussian("signalAt10", 5, 1, simPeakHeight);
-  std::cout<< histoTwo.GetEntries()<<std::endl;
   
   elementSpectrum mainSpectrum(histoOne);
   elementSpectrum signalSpectrum(histoTwo);
   
+  
   spectrumFitter test(mainSpectrum,signalSpectrum);
   test.fit(out);
-
-  
 }
 
-void testOfFewSinglePeaks()
+void testOfFewGaussians()
 {
- 
-  for(double height = 1; height < 15; height++)
-  {
-    std::string out= "test";
-    std::ostringstream s;
-    s << height;
-    out+=s.str();
-    s.str(std::string());
-      testOfSinglePeak(1, height,out);
-  } 
-}
-
-
-int main(int argc, char **argv) {
-  
-  std::string filePath = "";
-  std::string outPath = "";
-//   if(3 == argc)
-//   {
-//     filePath = argv[1];
-//     outPath = argv[2];
-//   }
   std::vector<double> heights;
   heights.push_back(1);
   heights.push_back(3);
@@ -96,30 +104,21 @@ int main(int argc, char **argv) {
   elementSpectrum simSpec3(simulatedHisto3);
   spectrumFitter fitter( expSpec, simSpec );
   fitter.addNextSpectrum( simSpec2);
-//   fitter.addNextSpectrum( simSpec3);
+  fitter.addNextSpectrum( simSpec3);
   fitter.fit("tescik");
-  
-  
-  return 0;
 }
 
-void exampleOfSingleFit(const std::string& file1, const std::string& file2)
+void testOfFewSinglePeaks()
 {
-  elementSpectrum spec(file1);
-  spec.readData();
-  
-  elementSpectrum spec2(file2);
-  spec2.readData();
-  
-  spectrumFitter test(spec, spec2);
-  test.fit(file2);
-  
-}
-
-void exampleOfElementSpectrumUsage(const std::string& filePath, const std::string& outPath)
-{
-  elementSpectrum file(filePath);
-   file.readData();
-   file.plot(outPath);
+ 
+  for(double height = 1; height < 15; height++)
+  {
     
+    std::string out= "test";
+    std::ostringstream s;
+    s << height;
+    out+=s.str();
+    s.str(std::string());
+    testOfSinglePeak(1, height,out);
+  } 
 }
