@@ -41,8 +41,8 @@ void dataFile::readData()
   while( std::getline(file, line) )
   {
     std::istringstream iss(line);
-    double bin, height;
-    if (! ( iss >> bin >> height ) )
+    double bin, height, dummy;
+    if (! ( iss >> bin >> height >> dummy) )
       break;
     fData.push_back(std::make_pair<>(bin, height));
   }
