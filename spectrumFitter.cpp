@@ -43,7 +43,7 @@ void spectrumFitter::fit(std::string out)
   
   TCanvas* c = new TCanvas();
   fFirstSpectrum.getHisto().Draw();
-  fFirstSpectrum.getHisto().Fit("fFnc", "0M");
+  fFirstSpectrum.getHisto().Fit("fFnc", "0EWM");
   
   for( unsigned int i = 0; i < fSpectraToFit.size(); i++)
   {
@@ -52,7 +52,7 @@ void spectrumFitter::fit(std::string out)
     fSpectraToFit[i].getHisto().Draw("same");
   }
   
-   c->BuildLegend();
+  c->BuildLegend();
   c->SetLogy();
   std::cout << "Chi square: " << fFnc->GetChisquare() << std::endl;
 
