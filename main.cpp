@@ -5,6 +5,7 @@
 #include "elementSpectrum.h"
 #include "spectrumFitter.h"
 
+void exampleOfMultipleFit(const std::string& expFile, const std::vector<std::string>& simFiles);
 void exampleOfSingleFit(const std::string& file1, const std::string& file2);
 TH1F generateGaussian(const std::string& name ,const  double mean, const double sigma, const double N);
 TH1F generateThreeGaussians(const std::string& name ,const std::vector<double>  mean, const std::vector<double>  sigma, const std::vector<double> N);
@@ -13,18 +14,58 @@ void testOfFewGaussians();
 void testOfFewSinglePeaks();
 
 int main(int argc, char **argv) {
+
+  testOfFewGaussians();
+//   testOfFewSinglePeaks();
   
-  exampleOfSingleFit(argv[1], argv[2]);
+  if(argc == 1)
+    std::cout<< "Please provide input \n";
+  
+  if(argc == 3)
+    exampleOfSingleFit(argv[1], argv[2]);
+  
+  if(argc > 3)
+  {
+    std::vector<std::string> simPaths;
+    for(int i = 3; i < argc; i++)
+      simPaths.push_back(argv[i]);
+    exampleOfMultipleFit(argv[1], simPaths);
+  }
+  
+
   return 0;
 }
+
+void exampleOfMultipleFit(const std::string& expFile, const std::vector< std::string >& simFiles)
+{
+  elementSpectrum exp(expFile);
+  exp.readData();
+  std::vector<elementSpectrum> sims;
+  for(auto file: simFiles)
+  {
+    elementSpectrum sim(file);
+    sim.readData();
+    sims.push_back(sim);
+  }
+  spectrumFitter fit(exp, sims[0]);
+  
+  if( sims.size() > 1 )
+    for(int i = 1; i < sims.size(); i++)
+      fit.addNextSpectrum(sims[i]);
+  
+  fit.fit("out");
+}
+
 
 void exampleOfSingleFit(const std::string& file1, const std::string& file2)
 {
   elementSpectrum spec(file1);
   spec.readData();
+  spec.plot("firstSpec.png");
   
   elementSpectrum spec2(file2);
   spec2.readData();
+  spec2.plot("secondSpec.png");
   
   spectrumFitter test(spec, spec2);
   test.fit(file2);
@@ -68,8 +109,8 @@ TH1F generateThreeGaussians(const std::string& name ,const std::vector<double>  
 
 void testOfSinglePeak(const double expPeakHeight, const double simPeakHeight, const std::string out)
 {
-  TH1F histoOne = generateGaussian("experimental", 5, 1, expPeakHeight);
-  TH1F histoTwo = generateGaussian("signalAt10", 5, 1, simPeakHeight);
+  TH1F histoOne = generateGaussian("main", 5, 1, expPeakHeight);
+  TH1F histoTwo = generateGaussian("fitted", 5, 1, simPeakHeight);
   
   elementSpectrum mainSpectrum(histoOne);
   elementSpectrum signalSpectrum(histoTwo);
@@ -98,13 +139,16 @@ void testOfFewGaussians()
   TH1F simulatedHisto = generateGaussian("sim", 5,0.5,1);
   TH1F simulatedHisto2 = generateGaussian("sim2", 2,0.5,1);
   TH1F simulatedHisto3 = generateGaussian("sim3", 7,0.5,1);
+  TH1F simulatedHisto4 = generateGaussian("sim4", 3,0.5,1);
   elementSpectrum expSpec(expHisto);
   elementSpectrum simSpec(simulatedHisto);
   elementSpectrum simSpec2(simulatedHisto2);
   elementSpectrum simSpec3(simulatedHisto3);
+  elementSpectrum simSpec4(simulatedHisto4);
   spectrumFitter fitter( expSpec, simSpec );
   fitter.addNextSpectrum( simSpec2);
   fitter.addNextSpectrum( simSpec3);
+  fitter.addNextSpectrum( simSpec4);
   fitter.fit("tescik");
 }
 
