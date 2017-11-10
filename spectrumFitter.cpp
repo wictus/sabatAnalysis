@@ -41,6 +41,7 @@ void spectrumFitter::fit(std::string out)
  
   fFnc->SetNumberFitPoints(100000);
   
+  TH1F* finalHisto = new TH1F("final", "final", 1101, 0.0000E+00, 1.1E+01);
   TCanvas* c = new TCanvas();
   fFirstSpectrum.getHisto().Draw();
   fFirstSpectrum.getHisto().Fit("fFnc", "0EWM");
@@ -50,8 +51,9 @@ void spectrumFitter::fit(std::string out)
     fSpectraToFit[i].getHisto().Scale( fFnc->GetParameter(i));
     fSpectraToFit[i].getHisto().SetLineColor(2+i);
     fSpectraToFit[i].getHisto().Draw("same");
+    finalHisto->Add( &fSpectraToFit[i].getHisto());
   }
-  
+   
   c->BuildLegend();
   c->SetLogy();
   std::cout << "Chi square: " << fFnc->GetChisquare() << std::endl;
@@ -59,6 +61,10 @@ void spectrumFitter::fit(std::string out)
   TString outName = out;
   outName+=".png";
   c->SaveAs(outName);
+  finalHisto->SetLineColor(fSpectraToFit.size()+3);
+  finalHisto->Draw();
+  fFirstSpectrum.getHisto().Draw("same");
+  c->SaveAs("test.png");
   delete c;
 }
 
