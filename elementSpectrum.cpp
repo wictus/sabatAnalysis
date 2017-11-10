@@ -12,7 +12,7 @@ elementSpectrum::elementSpectrum(const std::string& path): dataFile(path)
   histo =TH1F(fPath.c_str(), fPath.c_str(), 1101, 0.0000E+00, 1.1E+01);
   for(auto event: fData)
   {
-    histo.Fill(event.first, event.second);
+    histo.Fill(event.first, event.second.first);
   }  
 }
 
@@ -22,7 +22,7 @@ elementSpectrum::elementSpectrum(const elementSpectrum& copy): dataFile(copy.fPa
   histo = TH1F(fPath.c_str(), fPath.c_str(), 1101, 0.0000E+00, 1.1E+01);
   for(auto event: fData)
   {
-    histo.Fill(event.first, event.second);
+    histo.Fill(event.first, event.second.first);
   }
   if( fData.size() == 0)
     this->histo = copy.histo;
@@ -35,7 +35,7 @@ void elementSpectrum::plot(const std::string& output)
   {
     for(auto event: fData)
     {
-      histo.Fill(event.first, event.second);
+      histo.Fill(event.first, event.second.first);
     } 
   }
   TCanvas* c= new TCanvas();

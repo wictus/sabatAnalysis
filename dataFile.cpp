@@ -41,10 +41,10 @@ void dataFile::readData()
   while( std::getline(file, line) )
   {
     std::istringstream iss(line);
-    double bin, height, dummy;
-    if (! ( iss >> bin >> height >> dummy) )
+    double bin, height, error;
+    if (! ( iss >> bin >> height >> error) )
       break;
-    fData.push_back(std::make_pair<>(bin, height));
+    fData.push_back(std::make_pair<>(bin, std::make_pair<>(height,error) ) );
   }
   std::cout << "Read file with: " << fData.size() << " lines\n";
   if(fData.size() == 0)

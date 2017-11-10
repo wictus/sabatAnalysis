@@ -25,7 +25,7 @@ public:
   void readData();
   std::string getPath();
 protected:
-  std::vector<std::pair<double,double> > fData;
+  std::vector<std::pair<double,std::pair<double,double> > > fData;
   inline bool checkPath(){ struct stat buffer; return (stat ( fPath.c_str(), &buffer) == 0); };
   std::string fPath;
 };
