@@ -3,17 +3,20 @@
 
 #include "elementSpectrum.h"
 #include "TF1.h"
+#include "TCanvas.h"
 
 class spectrumFitter
 {
 public:
-  spectrumFitter(const elementSpectrum& firstSpectrum, const elementSpectrum& secondSpectrum);
+  spectrumFitter(const elementSpectrum& primarySpectrum);
   void fit(std::string out);
-  void addNextSpectrum(const elementSpectrum& spectrum);
+  void addNextSpectrum(const elementSpectrum& simSpectrum);
   ~spectrumFitter();
 private:
-  elementSpectrum fFirstSpectrum, fSecondSpectrum;
+  elementSpectrum fPrimarySpectrum;
   std::vector<elementSpectrum> fSpectraToFit;
+  float fStart = 0.0000E+00, fStop = 1.1E+01;
+  int fBins = 1101;
   TF1* fFnc;
 };
 

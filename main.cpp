@@ -15,14 +15,12 @@ void testOfFewSinglePeaks();
 
 int main(int argc, char **argv) {
 
-  testOfFewGaussians();
-//   testOfFewSinglePeaks();
+//   testOfFewGaussians();
+//    testOfFewSinglePeaks();
   
-  if(argc == 1)
+  if(argc != 3)
     std::cout<< "Please provide input \n";
-  
-  if(argc == 3)
-    exampleOfSingleFit(argv[1], argv[2]);
+ 
   
   if(argc > 3)
   {
@@ -47,8 +45,8 @@ void exampleOfMultipleFit(const std::string& expFile, const std::vector< std::st
     sim.readData();
     sims.push_back(sim);
   }
-  spectrumFitter fit(exp, sims[0]);
-  
+  spectrumFitter fit(exp);
+  fit.addNextSpectrum(sims[0]);
   if( sims.size() > 1 )
     for(int i = 1; i < sims.size(); i++)
       fit.addNextSpectrum(sims[i]);
@@ -67,7 +65,8 @@ void exampleOfSingleFit(const std::string& file1, const std::string& file2)
   spec2.readData();
   spec2.plot("secondSpec.png");
   
-  spectrumFitter test(spec, spec2);
+  spectrumFitter test(spec);
+  test.addNextSpectrum(spec2);
   test.fit(file2);
   
 }
@@ -116,7 +115,8 @@ void testOfSinglePeak(const double expPeakHeight, const double simPeakHeight, co
   elementSpectrum signalSpectrum(histoTwo);
   
   
-  spectrumFitter test(mainSpectrum,signalSpectrum);
+  spectrumFitter test(mainSpectrum);
+  test.addNextSpectrum(signalSpectrum);
   test.fit(out);
 }
 
@@ -145,7 +145,8 @@ void testOfFewGaussians()
   elementSpectrum simSpec2(simulatedHisto2);
   elementSpectrum simSpec3(simulatedHisto3);
   elementSpectrum simSpec4(simulatedHisto4);
-  spectrumFitter fitter( expSpec, simSpec );
+  spectrumFitter fitter( expSpec);
+  fitter.addNextSpectrum( simSpec);
   fitter.addNextSpectrum( simSpec2);
   fitter.addNextSpectrum( simSpec3);
   fitter.addNextSpectrum( simSpec4);

@@ -9,7 +9,7 @@ elementSpectrum::elementSpectrum(const TH1F& histo)
 
 elementSpectrum::elementSpectrum(const std::string& path): dataFile(path)
 {
-  histo =TH1F(fPath.c_str(), fPath.c_str(), 1101, 0.0000E+00, 1.1E+01);
+  histo =TH1F(fPath.c_str(), fPath.c_str(), fBins, fStart, fStop);
   for(auto event: fData)
   {
     histo.Fill(event.first, event.second.first);
@@ -19,7 +19,7 @@ elementSpectrum::elementSpectrum(const std::string& path): dataFile(path)
 elementSpectrum::elementSpectrum(const elementSpectrum& copy): dataFile(copy.fPath)
 {
   this->fData = copy.fData;
-  histo = TH1F(fPath.c_str(), fPath.c_str(), 1101, 0.0000E+00, 1.1E+01);
+  histo = *(new TH1F(fPath.c_str(), fPath.c_str(), fBins, fStart, fStop));
   for(auto event: fData)
   {
     histo.Fill(event.first, event.second.first);

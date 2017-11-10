@@ -15,15 +15,15 @@ Double_t simulateFunction(Double_t* x, Double_t par[])
 }
 
 
-spectrumFitter::spectrumFitter(const elementSpectrum& firstSpectrum, const elementSpectrum& secondSpectrum)
-:fFirstSpectrum(firstSpectrum), fSecondSpectrum(secondSpectrum)
+spectrumFitter::spectrumFitter(const elementSpectrum& primarySpectrum)
+:fPrimarySpectrum(primarySpectrum)
 {
-    fSpectraToFit.push_back(secondSpectrum);
+
 }
 
-void spectrumFitter::addNextSpectrum(const elementSpectrum& spectrum)
+void spectrumFitter::addNextSpectrum(const elementSpectrum& simSpectrum)
 {
-  fSpectraToFit.push_back(spectrum);
+  fSpectraToFit.push_back(simSpectrum);
 }
 
 
@@ -41,10 +41,10 @@ void spectrumFitter::fit(std::string out)
  
   fFnc->SetNumberFitPoints(100000);
   
-  TH1F* finalHisto = new TH1F("final", "final", 1101, 0.0000E+00, 1.1E+01);
+  TH1F* finalHisto = new TH1F("final", "final", fBins, fStart, fStop);
   TCanvas* c = new TCanvas();
-  fFirstSpectrum.getHisto().Draw();
-  fFirstSpectrum.getHisto().Fit("fFnc", "0EWM");
+  fPrimarySpectrum.getHisto().Draw();
+  fPrimarySpectrum.getHisto().Fit("fFnc", "0EWM");
   
   for( unsigned int i = 0; i < fSpectraToFit.size(); i++)
   {
@@ -63,9 +63,11 @@ void spectrumFitter::fit(std::string out)
   c->SaveAs(outName);
   finalHisto->SetLineColor(fSpectraToFit.size()+3);
   finalHisto->Draw();
-  fFirstSpectrum.getHisto().Draw("same");
+  fPrimarySpectrum.getHisto().Draw("same");
+  c->BuildLegend();
   c->SaveAs("test.png");
   delete c;
+  delete finalHisto;
 }
 
 
