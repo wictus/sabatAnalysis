@@ -43,14 +43,14 @@ void spectrumFitter::fit(std::string out)
   
   TH1F* finalHisto = new TH1F("final", "final", fBins, fStart, fStop);
   TCanvas* c = new TCanvas();
-  fPrimarySpectrum.getHisto().Draw();
+  fPrimarySpectrum.getHisto().Draw("hist");
   fPrimarySpectrum.getHisto().Fit("fFnc", "0EWM");
-  
+    
   for( unsigned int i = 0; i < fSpectraToFit.size(); i++)
   {
     fSpectraToFit[i].getHisto().Scale( fFnc->GetParameter(i));
     fSpectraToFit[i].getHisto().SetLineColor(2+i);
-    fSpectraToFit[i].getHisto().Draw("same");
+    fSpectraToFit[i].getHisto().Draw("histsame");
     finalHisto->Add( &fSpectraToFit[i].getHisto());
   }
    
@@ -62,8 +62,8 @@ void spectrumFitter::fit(std::string out)
   outName+=".png";
   c->SaveAs(outName);
   finalHisto->SetLineColor(fSpectraToFit.size()+3);
-  finalHisto->Draw();
-  fPrimarySpectrum.getHisto().Draw("same");
+  finalHisto->Draw("hist");
+  fPrimarySpectrum.getHisto().Draw("histsame");
   c->BuildLegend();
   c->SaveAs("test.png");
   delete c;
