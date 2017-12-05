@@ -18,7 +18,7 @@ Double_t simulateFunction(Double_t* x, Double_t par[])
 spectrumFitter::spectrumFitter(const elementSpectrum& primarySpectrum)
 :fPrimarySpectrum(primarySpectrum)
 {
-
+  gStyle->SetOptFit(1111);
 }
 
 void spectrumFitter::addNextSpectrum(const elementSpectrum& simSpectrum)
@@ -35,8 +35,12 @@ void spectrumFitter::fit(std::string out)
   fFnc = new TF1("fFnc", simulateFunction, 0, 11, fSpectraToFit.size());
   for( unsigned int i = 0; i < fSpectraToFit.size(); i++)
   {
-    fFnc->SetParameter(i, 1);
-    fFnc->SetParLimits(i,0, 10 );
+    fFnc->SetParameter(i, 0);
+    std::string name = fSpectraToFit[i].getPath();
+    int length = name.find_last_of("/") - (name.substr(0, name.find_last_of("/"))).find_last_of("/");
+    name= name.substr( (name.substr(0, name.find_last_of("/"))).find_last_of("/")+1 , length-1);
+    fFnc->SetParName(i,name.c_str());
+    fFnc->SetParLimits(i,0, 20 );
   }
  
   fFnc->SetNumberFitPoints(100000);
@@ -54,7 +58,8 @@ void spectrumFitter::fit(std::string out)
     finalHisto->Add( &fSpectraToFit[i].getHisto());
   }
    
-  c->BuildLegend();
+  TLegend legend = buildLegend();
+  legend.Draw();
   c->SetLogy();
   std::cout << "Chi square: " << fFnc->GetChisquare() << std::endl;
 
@@ -64,10 +69,23 @@ void spectrumFitter::fit(std::string out)
   finalHisto->SetLineColor(fSpectraToFit.size()+3);
   finalHisto->Draw("hist");
   fPrimarySpectrum.getHisto().Draw("histsame");
-  c->BuildLegend();
   c->SaveAs("test.png");
   delete c;
   delete finalHisto;
+}
+
+TLegend spectrumFitter::buildLegend()
+{
+  TLegend leg(0.1,0.65,0.38,0.85);
+  leg.AddEntry(&fPrimarySpectrum.getHisto(), "Experimental spectrum", "l");
+  for(unsigned int i = 0; i < fSpectraToFit.size(); i++)
+  {
+    std::string name = fSpectraToFit[i].getPath();
+    int length = name.find_last_of("/") - (name.substr(0, name.find_last_of("/"))).find_last_of("/");
+    name= name.substr( (name.substr(0, name.find_last_of("/"))).find_last_of("/")+1 , length-1);    
+    leg.AddEntry(&fSpectraToFit[i].getHisto(), name.c_str(), "l");
+  }
+  return leg;
 }
 
 
