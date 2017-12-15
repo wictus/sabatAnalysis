@@ -13,12 +13,15 @@ public:
   spectrumFitter(const elementSpectrum& primarySpectrum);
   void fit(std::string out);
   void addNextSpectrum(const elementSpectrum& simSpectrum);
+  void setRangeOfFit(const double start, const double stop);
   ~spectrumFitter();
 private:
   TLegend buildLegend();
   elementSpectrum fPrimarySpectrum;
   std::vector<elementSpectrum> fSpectraToFit;
   float fStart = 0.0000E+00, fStop = 1.1E+01;
+  double fStartOfRange = 0;
+  double fEndOfRange = 11;
   int fBins = 1101;
   TF1* fFnc;
 };

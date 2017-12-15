@@ -6,6 +6,7 @@ Double_t simulateFunction(Double_t* x, Double_t par[])
 {
   Double_t xx = x[0];
   Int_t bin = globalHisto[0]->GetXaxis()->FindBin(xx);
+    
   double br = 0;
   for( unsigned int i = 0; i < globalHisto.size(); i++)
   {
@@ -32,7 +33,7 @@ void spectrumFitter::fit(std::string out)
   for( unsigned int i = 0; i < fSpectraToFit.size(); i++)
     globalHisto.push_back( &fSpectraToFit[i].getHisto() );
   
-  fFnc = new TF1("fFnc", simulateFunction, 0, 11, fSpectraToFit.size());
+  fFnc = new TF1("fFnc", simulateFunction, fStartOfRange, fEndOfRange, fSpectraToFit.size());
   for( unsigned int i = 0; i < fSpectraToFit.size(); i++)
   {
     fFnc->SetParameter(i, 0);
@@ -48,7 +49,7 @@ void spectrumFitter::fit(std::string out)
   TH1F* finalHisto = new TH1F("final", "final", fBins, fStart, fStop);
   TCanvas* c = new TCanvas();
   fPrimarySpectrum.getHisto().Draw("hist");
-  fPrimarySpectrum.getHisto().Fit("fFnc", "0EM");
+  fPrimarySpectrum.getHisto().Fit("fFnc", "0EMWRL");
   std::cout << "Chi square: " << fFnc->GetChisquare()/fFnc->GetNDF() << std::endl;
     
   for( unsigned int i = 0; i < fSpectraToFit.size(); i++)
@@ -100,4 +101,10 @@ spectrumFitter::~spectrumFitter()
   } 
   
   delete fFnc;  
+}
+
+void spectrumFitter::setRangeOfFit(const double start, const double stop)
+{
+  fStartOfRange = start;
+  fEndOfRange = stop;
 }
