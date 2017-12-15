@@ -15,6 +15,8 @@ public:
   ~elementSpectrum();
   void plot(const std::string& output);
   TH1F& getHisto();
+  void produceDataFile(const std::string& output);
+  void addAnotherSpectrum(const elementSpectrum& spectrum, const double weightForOriginal = 1,  const double weightForSecondSpectrum = 1);
 protected:
   int fBins = 1101;
   float fStart = 0.0000E+00, fStop = 1.1E+01;

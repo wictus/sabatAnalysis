@@ -56,3 +56,33 @@ TH1F& elementSpectrum::getHisto()
 {
   return histo;
 }
+
+void elementSpectrum::produceDataFile(const std::string& output)
+{
+
+  std::ofstream file;
+  file.open(output.c_str());
+  
+  if(!file.good())
+  {
+    std::cout << "Error when creating file: " << output << std::endl;
+    std::exit(5);
+  }
+  
+  for(unsigned int i = 0; i < fData.size(); i++)
+  {
+    file << fData[i].first<< " " << fData[i].second.first<< " " << fData[i].second.second<< std::endl;
+  }
+  file.close();
+}
+
+void elementSpectrum::addAnotherSpectrum(const elementSpectrum& spectrum, const double weightForOriginal, const double weightForSecondSpectrum)
+{
+  for(unsigned int i = 0; i < fData.size(); i++)
+  {
+      fData[i].second.first*=weightForOriginal;
+      fData[i].second.first+=weightForSecondSpectrum*spectrum.getData()[i].second.first;
+      fData[i].second.second = sqrt( pow((weightForOriginal*fData[i].second.second),2) + pow(spectrum.getData()[i].second.second *weightForSecondSpectrum,2) );
+  }
+
+}
