@@ -58,3 +58,8 @@ std::string dataFile::getPath()
 {
   return fPath;
 }
+
+std::vector< std::pair< double, std::pair< double, double > > > dataFile::getData() const
+{
+  return fData;
+}

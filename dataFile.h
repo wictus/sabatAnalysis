@@ -24,6 +24,7 @@ public:
   dataFile& operator= (dataFile&);
   void readData();
   std::string getPath();
+  std::vector<std::pair<double,std::pair<double,double> > > getData() const;
 protected:
   std::vector<std::pair<double,std::pair<double,double> > > fData;
   inline bool checkPath(){ struct stat buffer; return (stat ( fPath.c_str(), &buffer) == 0); };
