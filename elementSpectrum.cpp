@@ -23,7 +23,7 @@ elementSpectrum::elementSpectrum(const elementSpectrum& copy): dataFile(copy.fPa
   for(auto event: fData)
   {
     histo.Fill(event.first, event.second.first);
-    histo.SetBinError( histo.FindBin(event.first), event.second.second*event.second.first*10 );
+    histo.SetBinError( histo.FindBin(event.first), event.second.second*event.second.first );
   }
   if( fData.size() == 0)
     this->histo = copy.histo;
