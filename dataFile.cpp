@@ -40,10 +40,19 @@ void dataFile::readData()
   std::string line;
   while( std::getline(file, line) )
   {
+    if( !testLine(line) )
+    {
+      std::cout << "Wrong amount of collumns in file:" << fPath << std::endl;
+      std::exit(3);
+    }
+    
     std::istringstream iss(line);
     double bin, height, error;
     if (! ( iss >> bin >> height >> error) )
+    {
+      std::cout << "Unknown line: " << line << std::endl;
       break;
+    }
     fData.push_back(std::make_pair<>(bin, std::make_pair<>(height,error) ) );
   }
   std::cout << "Read file with: " << fData.size() << " lines\n";
@@ -62,4 +71,22 @@ std::string dataFile::getPath()
 std::vector< std::pair< double, std::pair< double, double > > > dataFile::getData() const
 {
   return fData;
+}
+
+bool dataFile::testLine(const std::string& line)
+{
+  std::istringstream iss(line);
+  std::string word;
+  int wordsAmount = 0;
+  while( iss >> word )
+  {
+    wordsAmount++;
+  }
+  
+  if( 3 == wordsAmount )
+  {
+    return true;
+  }
+  std::cout << "WordsAmount found equal to: " << wordsAmount << std::endl;
+  return false;
 }
