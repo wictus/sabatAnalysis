@@ -49,7 +49,7 @@ void spectrumFitter::fit(std::string out)
   TH1F* finalHisto = new TH1F("final", "final", fBins, fStart, fStop);
   TCanvas* c = new TCanvas();
   fPrimarySpectrum.getHisto().Draw("hist");
-  fPrimarySpectrum.getHisto().Fit("fFnc", "0EMWRL");
+  fPrimarySpectrum.getHisto().Fit("fFnc", "0EMR");
   std::cout << "Chi square: " << fFnc->GetChisquare()/fFnc->GetNDF() << std::endl;
     
   for( unsigned int i = 0; i < fSpectraToFit.size(); i++)
