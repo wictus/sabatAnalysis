@@ -34,37 +34,6 @@ int main(int argc, char **argv) {
   return 0;
 }
 
-
-void checkAdditionForTwoElements()
-{
-  elementSpectrum first("../data/baseSpectra/Prompt\ -\ submarine\ 10\ cm/Cl35/7.9_1E8_LaBr3_3x3_FWHM_Cl_t_lt_50ns_out__sorted_cell__13_CUT.txt");
-  first.readData();
-  first.plot("Chlorine35.png");
-  elementSpectrum second("../data/baseSpectra/Prompt\ -\ submarine\ 10\ cm/Cl37/7.9_1E8_LaBr3_3x3_FWHM_Cl37_t_lt_50ns_out__sorted_cell__13_CUT.txt");
-  second.readData();
-  second.plot("Chlorine37.png");
-  
-  first.addAnotherSpectrum(second,0.76,0.24);
-  first.plot("SumOfChlorines.png");
-  
-  first.produceDataFile("../data/baseSpectra/Prompt\ -\ submarine\ 10\ cm/Cl/joinedClorines.txt");
-}
-
-
-elementSpectrum addTwoElements(elementSpectrum firstElement, elementSpectrum secondElement, double firstElementWeight, double secondElementWeight)
-{  
-  TH1F firstHisto = firstElement.getHisto();
-  TH1F secondHisto= secondElement.getHisto();
-    
-  firstHisto.Scale(firstElementWeight);
-  secondHisto.Scale(secondElementWeight);
-  firstHisto.Add(&secondHisto);
-  
-  elementSpectrum sumOfTwo(firstHisto);
-  return sumOfTwo;
-}
-
-
 void exampleOfMultipleFit(const std::string& expFile, const std::vector< std::string >& simFiles)
 {
   elementSpectrum exp(expFile);
@@ -83,9 +52,37 @@ void exampleOfMultipleFit(const std::string& expFile, const std::vector< std::st
       fit.addNextSpectrum(sims[i]);
   
 //   fit.setRangeOfFit(0,4.5);
+  fit.fitType(chi2);
   fit.fit("coctail");
 }
 
+void checkAdditionForTwoElements()
+{
+  elementSpectrum first("../data/baseSpectra/Prompt\ -\ submarine\ 10\ cm/Cl35/7.9_1E8_LaBr3_3x3_FWHM_Cl_t_lt_50ns_out__sorted_cell__13_CUT.txt");
+  first.readData();
+  first.plot("Chlorine35.png");
+  elementSpectrum second("../data/baseSpectra/Prompt\ -\ submarine\ 10\ cm/Cl37/7.9_1E8_LaBr3_3x3_FWHM_Cl37_t_lt_50ns_out__sorted_cell__13_CUT.txt");
+  second.readData();
+  second.plot("Chlorine37.png");
+  
+  first.addAnotherSpectrum(second,0.76,0.24);
+  first.plot("SumOfChlorines.png");
+  
+  first.produceDataFile("../data/baseSpectra/Prompt\ -\ submarine\ 10\ cm/Cl/joinedClorines.txt");
+}
+
+elementSpectrum addTwoElements(elementSpectrum firstElement, elementSpectrum secondElement, double firstElementWeight, double secondElementWeight)
+{  
+  TH1F firstHisto = firstElement.getHisto();
+  TH1F secondHisto= secondElement.getHisto();
+    
+  firstHisto.Scale(firstElementWeight);
+  secondHisto.Scale(secondElementWeight);
+  firstHisto.Add(&secondHisto);
+  
+  elementSpectrum sumOfTwo(firstHisto);
+  return sumOfTwo;
+}
 
 void exampleOfSingleFit(const std::string& file1, const std::string& file2)
 {

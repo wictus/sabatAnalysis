@@ -49,7 +49,16 @@ void spectrumFitter::fit(std::string out)
   TH1F* finalHisto = new TH1F("final", "final", fBins, fStart, fStop);
   TCanvas* c = new TCanvas();
   fPrimarySpectrum.getHisto().Draw("hist");
-  fPrimarySpectrum.getHisto().Fit("fFnc", "0EMR");
+  if( fTypeOfFit == chi2 )
+    fPrimarySpectrum.getHisto().Fit("fFnc", "0EMR");
+  else if ( fTypeOfFit == WL )
+    fPrimarySpectrum.getHisto().Fit("fFnc", "0EMRWL");
+  else 
+  {
+    std::cout << "Unknown fit type " <<std::endl;
+    std::exit(5);
+  }
+  
   std::cout << "Chi square: " << fFnc->GetChisquare()/fFnc->GetNDF() << std::endl;
     
   for( unsigned int i = 0; i < fSpectraToFit.size(); i++)
@@ -113,4 +122,9 @@ void spectrumFitter::setRangeOfFit(const double start, const double stop)
 {
   fStartOfRange = start;
   fEndOfRange = stop;
+}
+
+void spectrumFitter::fitType(typeOfFit type)
+{
+  fTypeOfFit = type;
 }

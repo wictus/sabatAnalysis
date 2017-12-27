@@ -7,6 +7,8 @@
 #include "TLegend.h"
 #include "TStyle.h"
 
+enum typeOfFit{ chi2, WL };
+
 class spectrumFitter
 {
 public:
@@ -14,6 +16,7 @@ public:
   void fit(std::string out);
   void addNextSpectrum(const elementSpectrum& simSpectrum);
   void setRangeOfFit(const double start, const double stop);
+  void fitType(typeOfFit type);
   ~spectrumFitter();
 private:
   TLegend buildLegend();
@@ -24,6 +27,7 @@ private:
   double fEndOfRange = 11;
   int fBins = 1101;
   TF1* fFnc;
+  typeOfFit fTypeOfFit = chi2;
 };
 
 #endif // SPECTRUM_FITTER
