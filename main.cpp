@@ -85,6 +85,7 @@ void exampleOfMultipleFit(const std::string& expFile, const std::vector< std::st
     for(int i = 1; i < sims.size(); i++)
       fit.addNextSpectrum(sims[i]);
   
+//   fit.setRangeOfFit(0,4.5);
   fit.fit("out");
 }
 
