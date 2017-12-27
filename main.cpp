@@ -21,10 +21,7 @@ int main(int argc, char **argv) {
 //    testOfFewSinglePeaks();
   
 //   checkAdditionForTwoElements();
-  if(argc != 2)
-    std::cout<< "Please provide input \n";
- 
-  
+    
   if(argc > 2)
   {
     std::vector<std::string> simPaths;
@@ -86,7 +83,7 @@ void exampleOfMultipleFit(const std::string& expFile, const std::vector< std::st
       fit.addNextSpectrum(sims[i]);
   
 //   fit.setRangeOfFit(0,4.5);
-  fit.fit("out");
+  fit.fit("coctail");
 }
 
 

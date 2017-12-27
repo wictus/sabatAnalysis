@@ -72,7 +72,7 @@ void spectrumFitter::fit(std::string out)
   finalHisto->Draw("hist");
   finalHisto->SetMinimum(1e-8);
   fPrimarySpectrum.getHisto().Draw("histsame");
-  c->SaveAs("test.png");
+  c->SaveAs("fit.png");
   
   fPrimarySpectrum.getHisto().Add(finalHisto, -1);
   fPrimarySpectrum.getHisto().Draw("hist");
