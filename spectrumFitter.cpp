@@ -73,6 +73,12 @@ void spectrumFitter::fit(std::string out)
   finalHisto->SetMinimum(1e-8);
   fPrimarySpectrum.getHisto().Draw("histsame");
   c->SaveAs("test.png");
+  
+  fPrimarySpectrum.getHisto().Add(finalHisto, -1);
+  fPrimarySpectrum.getHisto().Draw("hist");
+  fPrimarySpectrum.getHisto().SetTitle("Experimental - fit");
+  c->SaveAs("difference.png");
+  
   delete c;
   delete finalHisto;
 }
