@@ -16,12 +16,6 @@ elementSpectrum addTwoElements(elementSpectrum firstElement, elementSpectrum sec
 void checkAdditionForTwoElements();
 
 int main(int argc, char **argv) {
-
-//   testOfFewGaussians();
-//    testOfFewSinglePeaks();
-  
-//   checkAdditionForTwoElements();
-    
   if(argc > 2)
   {
     std::vector<std::string> simPaths;
