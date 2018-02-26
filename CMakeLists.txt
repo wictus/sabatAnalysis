@@ -15,7 +15,7 @@ add_library(spectrumFitter spectrumFitter.cpp)
 target_link_libraries(elementSpectrum dataFile ${ROOT_LIBRARIES})
 target_link_libraries(spectrumFitter elementSpectrum dataFile ${ROOT_LIBRARIES})
 
-add_executable(sabatanalysis main.cpp)
+add_executable(sabatanalysis main.cpp examples.cpp)
 
-target_link_libraries(sabatanalysis dataFile elementSpectrum spectrumFitter)
+target_link_libraries(sabatanalysis dataFile elementSpectrum spectrumFitter )
 
