@@ -17,7 +17,7 @@ void exampleOfMultipleFit(const std::string& expFile, const std::vector< std::st
     for(int i = 1; i < sims.size(); i++)
       fit.addNextSpectrum(sims[i]);
   
-//   fit.setRangeOfFit(0,4.5);
+  fit.setRangeOfFit(1,10); // limit range from 1 to 10 [MeV], to neglect fitting of 511 keV peak due to creation of pairs in material
   fit.fitType(chi2);
   fit.fit("coctail");
 }
